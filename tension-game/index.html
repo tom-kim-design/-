@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tension Play</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Full-screen mirrored camera with a soft ivory wash; UI floats in quiet corners. */
+:root {
+  --ivory: #f7f1ec;
+  --blush: #ebc3bd;
+  --rose: #c7807b;
+  --cocoa: #3b2b28;
+  --mute: #8a7470;
+  --white: #fffdfb;
+  --serif: "Cormorant Garamond", "Times New Roman", serif;
+  --sans: "Noto Sans KR", -apple-system, "Apple SD Gothic Neo", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; background: var(--ivory); color: var(--cocoa); font-family: var(--sans); overflow: hidden; -webkit-font-smoothing: antialiased; }
+canvas#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+video { display: none; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--rose); outline-offset: 3px; }
+
+.brandline { position: fixed; top: 24px; left: 28px; font-family: var(--serif); font-size: 22px; letter-spacing: 0.04em; z-index: 3; }
+.brandline i { color: var(--rose); }
+
+/* Overlay screens */
+.screen { position: fixed; inset: 0; display: grid; place-items: center; z-index: 5; background: rgba(247, 241, 236, 0.86); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 24px; }
+.panel { max-width: 460px; text-align: center; display: grid; gap: 18px; justify-items: center; }
+.eyebrow { font-size: 11.5px; letter-spacing: 0.24em; color: var(--mute); text-transform: uppercase; }
+h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(48px, 8vw, 76px); line-height: 0.95; margin: 0; letter-spacing: -0.01em; }
+h1 em { color: var(--rose); }
+.lead { margin: 0; color: var(--mute); font-size: 15px; line-height: 1.7; }
+.how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin-top: 4px; }
+.how div { background: var(--white); border-radius: 16px; padding: 14px 10px; font-size: 13px; line-height: 1.5; color: var(--mute); }
+.how b { display: block; color: var(--cocoa); font-weight: 600; font-size: 13.5px; margin-bottom: 2px; }
+.cta { border: 0; background: var(--cocoa); color: var(--white); border-radius: 999px; padding: 15px 34px; font-size: 15px; font-weight: 500; letter-spacing: 0.02em; transition: transform .15s, opacity .15s; }
+.cta:hover { transform: translateY(-1px); }
+.cta:disabled { opacity: .4; cursor: default; transform: none; }
+.note { font-size: 12px; color: var(--mute); }
+.err { color: #a2463f; font-size: 13.5px; max-width: 380px; }
+.final { font-family: var(--serif); font-size: 96px; line-height: 1; margin: 0; font-variant-numeric: tabular-nums; }
+.grade { font-family: var(--serif); font-style: italic; font-size: 26px; color: var(--rose); margin: 0; }
+
+/* HUD */
+.hud-top { position: fixed; top: 22px; right: 28px; display: flex; gap: 26px; align-items: baseline; z-index: 3; }
+.hud-top .k { font-size: 10.5px; letter-spacing: 0.2em; color: var(--mute); text-transform: uppercase; }
+.hud-top .v { font-family: var(--serif); font-size: 34px; font-variant-numeric: tabular-nums; line-height: 1; }
+
+.mode { position: fixed; top: 76px; left: 50%; transform: translateX(-50%); z-index: 3; text-align: center; }
+.mode .name { font-family: var(--serif); font-size: 30px; letter-spacing: 0.08em; }
+.mode .desc { font-size: 13px; color: var(--mute); }
+
+.mission { position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%); z-index: 3; background: var(--white); border-radius: 999px; padding: 12px 14px 12px 24px; display: flex; gap: 16px; align-items: center; box-shadow: 0 12px 40px -18px rgba(59, 43, 40, .4); min-width: 280px; }
+.mission .t { font-size: 15.5px; font-weight: 500; flex: 1; }
+.mission .ring { width: 34px; height: 34px; flex: none; }
+.mission.done { background: var(--rose); color: var(--white); }
+
+.sense { position: fixed; left: 24px; bottom: 24px; z-index: 3; background: rgba(255, 253, 251, 0.88); border-radius: 18px; padding: 14px 18px; display: grid; grid-template-columns: auto auto; gap: 7px 18px; font-size: 13px; min-width: 210px; }
+.sense .k { color: var(--mute); }
+.sense .v { font-weight: 500; text-align: right; }
+.sense .v.off { color: #b9a8a4; font-weight: 400; }
+.sense .title { grid-column: 1 / -1; font-size: 10.5px; letter-spacing: 0.2em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
+
+.toast { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); font-family: var(--serif); font-style: italic; font-size: 44px; color: var(--rose); z-index: 4; pointer-events: none; opacity: 0; transition: opacity .25s, transform .4s; }
+.toast.show { opacity: 1; transform: translate(-50%, -62%); }
+
+@media (max-width: 700px) {
+  .how { grid-template-columns: 1fr; }
+  .sense { left: 12px; bottom: 96px; min-width: 0; font-size: 12px; padding: 10px 14px; }
+  .mission { bottom: 20px; min-width: 0; width: calc(100% - 24px); }
+  .hud-top { right: 16px; gap: 16px; }
+  .brandline { left: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<video id="cam" playsinline muted></video>
+<canvas id="stage"></canvas>
+
+<div class="brandline">Tension <i>Play</i></div>
+
+<div class="hud-top" id="hud" hidden>
+  <div><div class="k">Score</div><div class="v" id="score">0</div></div>
+  <div><div class="k">Time</div><div class="v" id="time">60</div></div>
+</div>
+<div class="mode" id="mode" hidden><div class="name" id="modeName">COMFORT</div><div class="desc" id="modeDesc">부드럽게, 살짝만 당겨 주세요</div></div>
+<div class="mission" id="mission" hidden>
+  <span class="t" id="missionText"></span>
+  <svg class="ring" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" fill="none" stroke="#ebc3bd" stroke-width="3"/><circle id="missionArc" cx="18" cy="18" r="15" fill="none" stroke="#c7807b" stroke-width="3" stroke-linecap="round" stroke-dasharray="94.25" stroke-dashoffset="94.25" transform="rotate(-90 18 18)"/></svg>
+</div>
+<div class="toast" id="toast"></div>
+
+<div class="sense" id="sense" hidden aria-live="polite">
+  <div class="title">Live Sensing</div>
+  <span class="k">얼굴</span><span class="v off" id="sFace">찾는 중</span>
+  <span class="k">표정</span><span class="v off" id="sExpr">-</span>
+  <span class="k">시선</span><span class="v off" id="sGaze">-</span>
+  <span class="k">고개</span><span class="v off" id="sHead">-</span>
+  <span class="k">손동작</span><span class="v off" id="sHand">-</span>
+</div>
+
+<section class="screen" id="intro">
+  <div class="panel">
+    <div class="eyebrow">Interactive Tension Game</div>
+    <h1>Find your<br><em>tension.</em></h1>
+    <p class="lead">두 손 검지 사이에 탄성 밴드가 생겨요.<br>너무 느슨하지도, 너무 팽팽하지도 않게. 딱 좋은 텐션을 60초 동안 지켜 주세요.</p>
+    <div class="how">
+      <div><b>당기기</b>두 손 간격으로 텐션 조절. 한 손이면 엄지와 검지 사이</div>
+      <div><b>맞추기</b>오른쪽 게이지의 분홍 구간 안에 머물면 점수</div>
+      <div><b>미션</b>미소, 윙크, 시선, 손동작 미션 성공 시 보너스</div>
+    </div>
+    <button class="cta" id="start" disabled>준비 중</button>
+    <div class="note" id="loadNote">인식 모델을 불러오고 있어요</div>
+    <div class="err" id="err" hidden></div>
+    <div class="note">카메라 영상은 이 컴퓨터 안에서만 처리되고 어디에도 저장되거나 전송되지 않아요.</div>
+  </div>
+</section>
+
+<section class="screen" id="end" hidden>
+  <div class="panel">
+    <div class="eyebrow">Your Tension Score</div>
+    <p class="final" id="finalScore">0</p>
+    <p class="grade" id="grade"></p>
+    <p class="lead" id="endNote"></p>
+    <button class="cta" id="again">다시 하기</button>
+  </div>
+</section>
+
+<script type="module">
+import { FilesetResolver, FaceLandmarker, GestureRecognizer } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const $ = (id) => document.getElementById(id);
+const canvas = $("stage"), ctx = canvas.getContext("2d"), video = $("cam");
+const C = { ivory: "#f7f1ec", blush: "#ebc3bd", rose: "#c7807b", cocoa: "#3b2b28", white: "#fffdfb" };
+
+/* ---------- Models ---------- */
+let face = null, hands = null;
+async function loadModels() {
+  const files = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  const make = async (delegate) => Promise.all([
+    FaceLandmarker.createFromOptions(files, {
+      baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task", delegate },
+      runningMode: "VIDEO", numFaces: 1, outputFaceBlendshapes: true,
+    }),
+    GestureRecognizer.createFromOptions(files, {
+      baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task", delegate },
+      runningMode: "VIDEO", numHands: 2,
+    }),
+  ]);
+  try { [face, hands] = await make("GPU"); }
+  catch { [face, hands] = await make("CPU"); }
+}
+
+/* ---------- Sensing ---------- */
+const GESTURE_KO = { Open_Palm: "손바닥", Closed_Fist: "주먹", Victory: "브이", Thumb_Up: "엄지 척", Thumb_Down: "엄지 아래", Pointing_Up: "검지 위로", ILoveYou: "사랑해" };
+const sense = { face: false, expr: "-", gaze: "-", head: "-", gestures: [], handPts: [] };
+
+// Cover-fit mapping from normalized video coords to mirrored screen pixels.
+let view = { ox: 0, oy: 0, dw: 1, dh: 1 };
+const toScreen = (p) => ({ x: view.ox + (1 - p.x) * view.dw, y: view.oy + p.y * view.dh });
+
+function readFace(res) {
+  const lm = res.faceLandmarks && res.faceLandmarks[0];
+  sense.face = !!lm;
+  if (!lm) { sense.expr = sense.gaze = sense.head = "-"; return; }
+  const bs = {}; (res.faceBlendshapes?.[0]?.categories || []).forEach(c => bs[c.categoryName] = c.score);
+  const g = (k) => bs[k] || 0;
+
+  // Expression (side-agnostic so mirroring never matters)
+  const smile = (g("mouthSmileLeft") + g("mouthSmileRight")) / 2;
+  const bl = g("eyeBlinkLeft"), br = g("eyeBlinkRight");
+  if (Math.abs(bl - br) > 0.35 && Math.max(bl, br) > 0.5) sense.expr = "윙크";
+  else if (g("jawOpen") > 0.45) sense.expr = "놀람";
+  else if (smile > 0.45) sense.expr = "미소";
+  else if (g("mouthPucker") > 0.55) sense.expr = "입술 쭉";
+  else if (bl > 0.55 && br > 0.55) sense.expr = "눈 감음";
+  else sense.expr = "무표정";
+
+  // Gaze: iris position between eye corners, in mirrored screen space
+  const eyes = [[33, 133], [362, 263]].map(([a, b]) => [toScreen(lm[a]), toScreen(lm[b])]);
+  const irises = [468, 473].filter(i => lm[i]).map(i => toScreen(lm[i]));
+  let ratios = [];
+  irises.forEach(ir => {
+    const eye = eyes.reduce((best, e) => { const cx = (e[0].x + e[1].x) / 2, cy = (e[0].y + e[1].y) / 2; const d = Math.hypot(ir.x - cx, ir.y - cy); return !best || d < best.d ? { e, d } : best; }, null).e;
+    const minX = Math.min(eye[0].x, eye[1].x), maxX = Math.max(eye[0].x, eye[1].x);
+    if (maxX - minX > 2) ratios.push((ir.x - minX) / (maxX - minX));
+  });
+  const hr = ratios.length ? ratios.reduce((a, b) => a + b) / ratios.length : 0.5;
+  const up = (g("eyeLookUpLeft") + g("eyeLookUpRight")) / 2, down = (g("eyeLookDownLeft") + g("eyeLookDownRight")) / 2;
+  sense.gaze = hr < 0.40 ? "왼쪽" : hr > 0.60 ? "오른쪽" : up > 0.35 ? "위" : (down > 0.5 && sense.expr !== "눈 감음") ? "아래" : "정면";
+
+  // Head turn: nose between the two face edges
+  const nose = toScreen(lm[1]), l = toScreen(lm[234]), r = toScreen(lm[454]);
+  const minX = Math.min(l.x, r.x), maxX = Math.max(l.x, r.x);
+  const nr = (nose.x - minX) / Math.max(1, maxX - minX);
+  sense.head = nr < 0.38 ? "왼쪽" : nr > 0.62 ? "오른쪽" : "정면";
+}
+
+function readHands(res) {
+  sense.handPts = (res.landmarks || []).map(h => ({ thumb: toScreen(h[4]), index: toScreen(h[8]), wrist: toScreen(h[0]) }));
+  sense.gestures = (res.gestures || []).map(gs => gs[0] && gs[0].score > 0.55 ? gs[0].categoryName : "None");
+}
+
+function paintSense() {
+  const set = (id, text, on) => { const e = $(id); e.textContent = text; e.classList.toggle("off", !on); };
+  set("sFace", sense.face ? "인식됨" : "찾는 중", sense.face);
+  set("sExpr", sense.face ? sense.expr : "-", sense.face && sense.expr !== "무표정");
+  set("sGaze", sense.face ? sense.gaze : "-", sense.face && sense.gaze !== "정면");
+  set("sHead", sense.face ? sense.head : "-", sense.face && sense.head !== "정면");
+  const gk = sense.gestures.filter(x => x !== "None").map(x => GESTURE_KO[x] || x);
+  set("sHand", sense.handPts.length ? (gk.join(" · ") || `손 ${sense.handPts.length}개`) : "-", sense.handPts.length > 0);
+}
+
+/* ---------- Game ---------- */
+const MISSIONS = [
+  { text: "미소 지어 주세요", ok: () => sense.expr === "미소" },
+  { text: "윙크해 주세요", ok: () => sense.expr === "윙크" },
+  { text: "입을 '아' 벌려 주세요", ok: () => sense.expr === "놀람" },
+  { text: "왼쪽을 바라봐 주세요", ok: () => sense.gaze === "왼쪽" || sense.head === "왼쪽" },
+  { text: "오른쪽을 바라봐 주세요", ok: () => sense.gaze === "오른쪽" || sense.head === "오른쪽" },
+  { text: "위를 바라봐 주세요", ok: () => sense.gaze === "위" },
+  { text: "브이를 해 주세요", ok: () => sense.gestures.includes("Victory") },
+  { text: "엄지 척!", ok: () => sense.gestures.includes("Thumb_Up") },
+  { text: "손바닥을 펴 보여 주세요", ok: () => sense.gestures.includes("Open_Palm") },
+];
+const MODES = [
+  { name: "COMFORT", desc: "부드럽게, 살짝만 당겨 주세요", center: 0.32 },
+  { name: "SUPPORT", desc: "탄탄하게, 힘 있게 당겨 주세요", center: 0.72 },
+];
+const ZONE = 0.2, GAME_LEN = 60;
+let game = null; // { t0, score, mode, modeAt, mission, missionAt, hold, inZone, done }
+let tension = 0, tensionShown = 0, hasBand = false, bandA = null, bandB = null;
+
+function newGame() {
+  game = { t0: performance.now(), score: 0, modeIdx: 0, modeAt: performance.now(), mission: null, missionAt: performance.now() + 4000, hold: 0, inZoneTime: 0, missions: 0, over: false };
+  $("hud").hidden = $("mode").hidden = $("sense").hidden = false;
+  $("intro").hidden = $("end").hidden = true;
+}
+function toast(text) { const t = $("toast"); t.textContent = text; t.classList.add("show"); clearTimeout(toast.id); toast.id = setTimeout(() => t.classList.remove("show"), 900); }
+
+function zoneCenter(now) {
+  const m = MODES[game.modeIdx];
+  return Math.min(0.88, Math.max(0.12, m.center + Math.sin(now / 1400) * 0.06));
+}
+
+function updateGame(now, dt) {
+  if (!game || game.over) return;
+  const left = GAME_LEN - (now - game.t0) / 1000;
+  if (left <= 0) return endGame();
+  $("time").textContent = Math.ceil(left);
+
+  // Switch Comfort/Support every 8s
+  if (now - game.modeAt > 8000) { game.modeIdx = 1 - game.modeIdx; game.modeAt = now; $("modeName").textContent = MODES[game.modeIdx].name; $("modeDesc").textContent = MODES[game.modeIdx].desc; toast(MODES[game.modeIdx].name === "SUPPORT" ? "Support" : "Comfort"); }
+
+  const zc = zoneCenter(now);
+  game.inZone = hasBand && Math.abs(tension - zc) <= ZONE / 2;
+  if (game.inZone) { game.score += dt * 12; game.inZoneTime += dt; }
+
+  // Missions
+  const ms = $("mission");
+  if (!game.mission && now > game.missionAt) {
+    let next; do { next = MISSIONS[Math.floor(Math.random() * MISSIONS.length)]; } while (next === game.lastMission);
+    game.mission = next; game.lastMission = next; game.missionStart = now; game.hold = 0;
+    $("missionText").textContent = next.text; ms.hidden = false; ms.classList.remove("done");
+  }
+  if (game.mission) {
+    if (game.mission.ok()) game.hold += dt; else game.hold = Math.max(0, game.hold - dt * 0.5);
+    $("missionArc").setAttribute("stroke-dashoffset", String(94.25 * (1 - Math.min(1, game.hold / 0.6))));
+    if (game.hold >= 0.6) {
+      game.score += 50; game.missions++; ms.classList.add("done"); $("missionText").textContent = "좋아요  +50"; toast("Lovely");
+      game.mission = null; game.missionAt = now + 3500;
+      setTimeout(() => { if (!game.mission) ms.hidden = true; }, 900);
+    } else if (now - game.missionStart > 6000) {
+      game.mission = null; game.missionAt = now + 2500; ms.hidden = true;
+    }
+  }
+  $("score").textContent = Math.round(game.score);
+}
+
+function endGame() {
+  game.over = true;
+  $("mission").hidden = $("mode").hidden = $("hud").hidden = true;
+  const s = Math.round(game.score);
+  $("finalScore").textContent = s;
+  $("grade").textContent = s >= 700 ? "Perfect Tension" : s >= 450 ? "Lovely Balance" : s >= 200 ? "Soft Start" : "Warming Up";
+  $("endNote").textContent = `딱 맞는 텐션을 ${Math.round(game.inZoneTime)}초 동안 지켰고, 미션 ${game.missions}개를 성공했어요.`;
+  $("end").hidden = false;
+}
+
+/* ---------- Drawing ---------- */
+function resize() {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+addEventListener("resize", resize); resize();
+
+function computeView() {
+  const W = innerWidth, H = innerHeight, vw = video.videoWidth || 1280, vh = video.videoHeight || 720;
+  const s = Math.max(W / vw, H / vh); view = { dw: vw * s, dh: vh * s, ox: (W - vw * s) / 2, oy: (H - vh * s) / 2 };
+}
+
+function computeBand() {
+  const hp = sense.handPts;
+  hasBand = false;
+  if (hp.length >= 2) {
+    bandA = hp[0].index; bandB = hp[1].index; hasBand = true;
+    const d = Math.hypot(bandA.x - bandB.x, bandA.y - bandB.y) / view.dw;
+    tension = clamp((d - 0.08) / (0.62 - 0.08));
+  } else if (hp.length === 1) {
+    bandA = hp[0].thumb; bandB = hp[0].index; hasBand = true;
+    const d = Math.hypot(bandA.x - bandB.x, bandA.y - bandB.y) / view.dw;
+    tension = clamp((d - 0.02) / (0.2 - 0.02));
+  }
+}
+const clamp = (v) => Math.max(0, Math.min(1, v));
+
+function drawBand(now) {
+  if (!hasBand) return;
+  tensionShown += (tension - tensionShown) * 0.25;
+  const A = bandA, B = bandB, mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+  const len = Math.hypot(B.x - A.x, B.y - A.y) || 1;
+  const nx = -(B.y - A.y) / len, ny = (B.x - A.x) / len;
+  const sag = (1 - tensionShown) * Math.min(160, len * 0.45) * (ny < 0 ? -1 : 1);
+  const wobble = Math.sin(now / 120) * (1 - tensionShown) * 6;
+  const cx = mx + nx * (sag + wobble), cy = my + ny * (sag + wobble);
+  const inZone = game && !game.over && game.inZone;
+  ctx.save();
+  ctx.lineCap = "round";
+  if (inZone) { ctx.shadowColor = C.rose; ctx.shadowBlur = 26; }
+  const grad = ctx.createLinearGradient(A.x, A.y, B.x, B.y);
+  grad.addColorStop(0, C.blush); grad.addColorStop(0.5, C.rose); grad.addColorStop(1, C.blush);
+  ctx.strokeStyle = grad; ctx.lineWidth = 18 - tensionShown * 8;
+  ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.quadraticCurveTo(cx, cy, B.x, B.y); ctx.stroke();
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = "rgba(255,253,251,.7)"; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.quadraticCurveTo(cx, cy - 3, B.x, B.y); ctx.stroke();
+  [A, B].forEach(p => { ctx.fillStyle = C.white; ctx.beginPath(); ctx.arc(p.x, p.y, 9, 0, Math.PI * 2); ctx.fill(); ctx.strokeStyle = C.rose; ctx.lineWidth = 2; ctx.stroke(); });
+  ctx.restore();
+}
+
+function drawGauge(now) {
+  if (!game || game.over) return;
+  const H = Math.min(320, innerHeight * 0.45), W = 10, x = innerWidth - 56, y = (innerHeight - H) / 2;
+  ctx.save();
+  ctx.fillStyle = "rgba(255,253,251,.85)"; roundRect(x - 14, y - 34, W + 28, H + 68, 20); ctx.fill();
+  ctx.fillStyle = "rgba(59,43,40,.08)"; roundRect(x, y, W, H, 5); ctx.fill();
+  const zc = zoneCenter(now), zTop = y + H * (1 - (zc + ZONE / 2)), zH = H * ZONE;
+  ctx.fillStyle = game.inZone ? C.rose : C.blush; roundRect(x - 3, zTop, W + 6, zH, 6); ctx.fill();
+  if (hasBand) { const ty = y + H * (1 - tensionShown); ctx.fillStyle = C.cocoa; ctx.beginPath(); ctx.arc(x + W / 2, ty, 8, 0, Math.PI * 2); ctx.fill(); }
+  ctx.fillStyle = "#8a7470"; ctx.font = "500 10px 'Noto Sans KR', sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("TIGHT", x + W / 2, y - 14); ctx.fillText("SOFT", x + W / 2, y + H + 22);
+  ctx.restore();
+}
+function roundRect(x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
+
+function drawHint() {
+  if (!game || game.over || hasBand) return;
+  ctx.save(); ctx.fillStyle = C.cocoa; ctx.globalAlpha = .7; ctx.textAlign = "center";
+  ctx.font = "500 16px 'Noto Sans KR', sans-serif";
+  ctx.fillText("카메라에 손을 보여 주세요", innerWidth / 2, innerHeight / 2);
+  ctx.restore();
+}
+
+/* ---------- Loop ---------- */
+let lastVideoTime = -1, lastNow = performance.now(), running = false;
+function frame(now) {
+  const dt = Math.min(0.1, (now - lastNow) / 1000); lastNow = now;
+  const W = innerWidth, H = innerHeight;
+  ctx.fillStyle = C.ivory; ctx.fillRect(0, 0, W, H);
+  if (video.readyState >= 2) {
+    computeView();
+    ctx.save(); ctx.translate(W, 0); ctx.scale(-1, 1);
+    ctx.drawImage(video, view.ox, view.oy, view.dw, view.dh);
+    ctx.restore();
+    ctx.fillStyle = "rgba(247,241,236,.38)"; ctx.fillRect(0, 0, W, H);
+    if (video.currentTime !== lastVideoTime) {
+      lastVideoTime = video.currentTime;
+      const ts = performance.now();
+      try { readFace(face.detectForVideo(video, ts)); } catch (e) { console.warn(e); }
+      try { readHands(hands.recognizeForVideo(video, ts + 0.01)); } catch (e) { console.warn(e); }
+      computeBand(); paintSense();
+    }
+  }
+  updateGame(now, dt);
+  drawBand(now); drawGauge(now); drawHint();
+  requestAnimationFrame(frame);
+}
+
+/* ---------- Start ---------- */
+async function startCamera() {
+  const stream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }, audio: false });
+  video.srcObject = stream; await video.play();
+}
+
+$("start").onclick = async () => {
+  $("err").hidden = true; $("start").disabled = true; $("start").textContent = "카메라 켜는 중";
+  try {
+    if (!video.srcObject) await startCamera();
+    if (!running) { running = true; requestAnimationFrame(frame); }
+    newGame();
+  } catch (e) {
+    $("err").hidden = false;
+    $("err").textContent = e && e.name === "NotAllowedError" ? "카메라 권한이 거부됐어요. 브라우저 주소창의 카메라 아이콘에서 허용한 뒤 다시 눌러 주세요." : e && e.name === "NotFoundError" ? "연결된 카메라를 찾지 못했어요." : "카메라를 켜지 못했어요. 이 페이지를 localhost 주소로 열었는지 확인해 주세요.";
+    $("start").disabled = false; $("start").textContent = "다시 시도";
+  }
+};
+$("again").onclick = () => newGame();
+
+// Idle background before the camera starts
+(function idle(now) { if (running) return; ctx.fillStyle = C.ivory; ctx.fillRect(0, 0, innerWidth, innerHeight); requestAnimationFrame(idle); })(performance.now());
+
+loadModels().then(() => {
+  $("start").disabled = false; $("start").textContent = "카메라 켜고 시작"; $("loadNote").textContent = "얼굴 · 표정 · 시선 · 손동작 인식 준비 완료";
+  window.__modelsReady = true;
+}).catch((e) => {
+  console.error(e);
+  $("loadNote").hidden = true; $("err").hidden = false; $("err").textContent = "인식 모델을 불러오지 못했어요. 인터넷 연결을 확인하고 새로고침해 주세요.";
+});
+</script>
+</body>
+</html>
