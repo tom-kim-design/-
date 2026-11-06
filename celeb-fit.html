@@ -8,6 +8,8 @@
 :root {
   --bg: #ffffff;
   --panel: #f5f5f7;
+  --plinth: #e8e8ed;
+  --plinth-top: #f0f0f3;
   --fg: #1d1d1f;
   --muted: #6e6e73;
   --faint: #86868b;
@@ -24,14 +26,14 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #000000; --panel: #141415; --fg: #f5f5f7; --muted: #a1a1a6; --faint: #86868b; --line: #38383a; --hair: #242426;
+    --bg: #000000; --panel: #141415; --plinth: #232325; --plinth-top: #2b2b2e; --fg: #f5f5f7; --muted: #a1a1a6; --faint: #86868b; --line: #38383a; --hair: #242426;
     --ink: #f5f5f7; --ink-fg: #000000; --accent: #2997ff;
     --fact: #5fd08a; --fact-bg: #10261a; --interp: #9fb0ff; --interp-bg: #181d3a; --check: #f2b552; --check-bg: #2d220f;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #000000; --panel: #141415; --fg: #f5f5f7; --muted: #a1a1a6; --faint: #86868b; --line: #38383a; --hair: #242426;
+  --bg: #000000; --panel: #141415; --plinth: #232325; --plinth-top: #2b2b2e; --fg: #f5f5f7; --muted: #a1a1a6; --faint: #86868b; --line: #38383a; --hair: #242426;
   --ink: #f5f5f7; --ink-fg: #000000; --accent: #2997ff;
   --fact: #5fd08a; --fact-bg: #10261a; --interp: #9fb0ff; --interp-bg: #181d3a; --check: #f2b552; --check-bg: #2d220f;
   color-scheme: dark;
@@ -83,6 +85,84 @@ nav.top .wrap { display: flex; align-items: center; justify-content: space-betwe
 .wrow .bar { grid-column: 1 / -1; }
 .wrow .pct { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
 @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } .method { grid-template-columns: 1fr; gap: 24px; } }
+
+/* Landing */
+.navlinks { display: flex; gap: 4px; margin-left: auto; margin-right: 12px; }
+.navlinks button { border: 0; background: none; font-size: 13.5px; color: var(--muted); padding: 6px 10px; border-radius: 8px; }
+.navlinks button:hover { color: var(--fg); }
+@media (max-width: 760px) { .navlinks { display: none; } }
+.hero2 { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: center; padding-block: clamp(56px, 10vh, 112px) 88px; }
+.hero2 h1 { max-width: 15em; font-family: var(--display); font-weight: 700; font-size: clamp(40px, 6vw, 76px); line-height: 1.03; letter-spacing: -0.035em; margin: 0 0 20px; text-wrap: balance; }
+.hero2 .sub { font-size: clamp(17px, 1.9vw, 21px); color: var(--muted); margin: 0; max-width: 26em; }
+.hero2 .bigsearch { margin: 36px 0 0; max-width: 560px; }
+.hero2 .tryrow { justify-content: flex-start; }
+.hero-art { position: relative; min-width: 0; }
+.stage { aspect-ratio: 5 / 4; max-width: 100%; border-radius: 28px; background: radial-gradient(120% 90% at 50% 0%, var(--bg) 0%, var(--panel) 55%); border: 1px solid var(--hair); overflow: hidden; display: grid; place-items: end center; }
+.stage svg { width: 100%; height: auto; display: block; }
+.floatcard { position: absolute; left: -24px; bottom: 28px; width: 200px; background: var(--bg); border: 1px solid var(--hair); border-radius: 16px; padding: 14px 16px; box-shadow: 0 18px 50px -24px rgba(0,0,0,.35); display: grid; gap: 4px; }
+.fc-k { font-size: 11px; color: var(--faint); letter-spacing: 0.04em; }
+.fc-t { font-weight: 600; font-size: 14.5px; }
+.fc-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.fc-row b { font-family: var(--display); font-size: 22px; color: var(--fg); font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .hero2 { grid-template-columns: 1fr; gap: 36px; } .floatcard { left: 12px; bottom: 12px; } }
+.block { padding-block: 88px; border-top: 1px solid var(--hair); }
+h2.big { font-family: var(--display); font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 14px; text-wrap: balance; }
+.block .steps { margin: 36px 0 0; }
+.steps .ico { width: 36px; height: 36px; fill: none; stroke: var(--fg); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 14px; display: block; }
+.cases { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.case { text-align: left; border: 1px solid var(--hair); background: var(--bg); border-radius: 20px; padding: 0; overflow: hidden; display: grid; transition: border-color .15s, transform .2s; }
+.case:hover { border-color: var(--fg); transform: translateY(-2px); }
+.case .thumb { aspect-ratio: 4 / 3; border-radius: 0; }
+.case .body { padding: 24px 22px 22px; display: grid; gap: 6px; align-content: start; }
+.case .meta { font-size: 12px; color: var(--faint); letter-spacing: 0.03em; }
+.case .who { font-family: var(--display); font-size: 19px; font-weight: 600; letter-spacing: -0.015em; }
+.case .what { font-size: 14px; font-weight: 500; }
+.case p { margin: 0; font-size: 13.5px; color: var(--muted); }
+.case .go { font-size: 13.5px; color: var(--accent); margin-top: 6px; }
+@media (max-width: 960px) { .cases { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .cases { grid-template-columns: 1fr; } }
+.thumb { background: radial-gradient(120% 90% at 50% 0%, var(--bg) 0%, var(--panel) 60%); border-radius: 14px; display: grid; place-items: center; overflow: hidden; }
+.thumb svg { height: 86%; width: auto; max-width: 100%; }
+.block.method { margin: 0; }
+.ctaband { margin-block: 24px 0; border-radius: 28px; background: var(--ink); color: var(--ink-fg); padding: clamp(40px, 7vw, 72px) clamp(24px, 6vw, 64px); display: flex; flex-wrap: wrap; gap: 24px; align-items: center; justify-content: space-between; }
+.ctaband h2 { font-family: var(--display); font-size: clamp(26px, 3.4vw, 38px); letter-spacing: -0.025em; line-height: 1.15; margin: 0; max-width: 16em; text-wrap: balance; }
+.btn.light { background: var(--ink-fg); color: var(--ink); }
+.foot2 { padding-block: 40px 64px; display: flex; flex-wrap: wrap; gap: 12px 32px; align-items: baseline; justify-content: space-between; color: var(--faint); font-size: 13px; }
+.foot2 p { margin: 0; max-width: 46em; }
+.logo.static { color: var(--fg); }
+/* Analysis imagery */
+.portrait { display: grid; gap: 8px; justify-items: center; }
+.portrait img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; display: block; }
+.portrait .linkbtn { border: 0; background: none; color: var(--accent); font-size: 12.5px; padding: 2px 4px; }
+@media (max-width: 640px) { .portrait { justify-items: start; } .portrait img { width: 84px; height: 84px; } }
+.card .thumb { aspect-ratio: 16 / 10; margin: -8px -8px 2px; }
+
+/* Partnership readiness + proposal */
+.ready { margin-top: 24px; border: 1px solid var(--hair); border-radius: 14px; padding: 16px 18px; display: grid; gap: 12px; }
+.ready-top { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.ready-k { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--faint); }
+.ready-r { font-size: 15px; }
+.nextstep { margin-top: 40px; border-radius: 20px; background: var(--panel); padding: 28px 30px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; }
+.nextstep > div { flex: 1 1 320px; min-width: 0; }
+.nextstep .eyebrow { margin-bottom: 8px; }
+.nextstep b { font-family: var(--display); font-size: 20px; letter-spacing: -0.015em; display: block; }
+.nextstep p:not(.eyebrow) { margin: 6px 0 0; color: var(--muted); font-size: 14.5px; }
+.proposal { margin-top: 64px; }
+.pctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: flex-end; }
+.colabel { font-size: 12.5px; color: var(--faint); }
+.pctrl input { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 7px 10px; width: 120px; }
+.pname { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: -0.015em; }
+.pdesc { margin: 6px 0 14px; font-size: 16px; max-width: 40em; }
+.structs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.struct { border: 1px solid var(--hair); border-radius: 14px; padding: 18px 20px; display: grid; gap: 6px; align-content: start; }
+.struct.rec { border-color: var(--fg); }
+.struct .tag { justify-self: start; }
+.struct b { font-size: 16.5px; letter-spacing: -0.01em; }
+.struct p { margin: 0; font-size: 14.5px; }
+.struct .fit { color: var(--muted); }
+.chain .dur { font-size: 12.5px; color: var(--faint); }
+.chain .rd { color: var(--muted); font-size: 14.5px; margin-top: 2px; }
+.copyfall { width: 100%; min-height: 220px; margin-top: 16px; font: inherit; font-size: 13.5px; color: var(--fg); background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
 
 /* Shared atoms */
 .bar { height: 4px; border-radius: 2px; background: var(--hair); overflow: hidden; }
@@ -196,7 +276,7 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
 .persona { font-family: var(--display); font-size: clamp(19px, 2.4vw, 23px); font-weight: 500; letter-spacing: -0.015em; line-height: 1.4; margin: 0 0 18px; max-width: 30em; }
 .persona::before { content: "“"; color: var(--faint); }
 .persona::after { content: "”"; color: var(--faint); }
-.hero-d { display: grid; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 32px; align-items: start; }
+.hero-d { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; align-items: start; }
 .mock { background: var(--panel); border-radius: 18px; aspect-ratio: 3 / 4; max-width: 100%; display: grid; place-items: center; position: relative; overflow: hidden; }
 .mock svg { width: 78%; height: auto; }
 .mock .cap { position: absolute; left: 14px; bottom: 12px; font-size: 11.5px; color: var(--faint); }
@@ -222,7 +302,7 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
 <nav class="top"><div class="wrap">
   <button class="logo" id="home" type="button">CELEB<i>×</i>PRODUCT FIT</button>
   <form class="navsearch" id="navform" hidden autocomplete="off">
-    <label for="navq" class="sr" hidden>셀럽 이름</label>
+    <label for="navq" hidden>셀럽 이름</label>
     <input id="navq" type="search" placeholder="다른 셀럽 분석" maxlength="60">
     <button class="btn small" type="submit">분석</button>
   </form>
@@ -231,37 +311,36 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
 <div class="wrap">
   <!-- MAIN PAGE -->
   <section id="v-home">
-    <div class="hero">
-      <p class="kicker">Celebrity Brand &amp; Product Strategy</p>
-      <h1>From Celebrity Influence to Product Opportunity.</h1>
-      <p class="sub">Discover what they can credibly sell, and why consumers will buy.</p>
-      <form class="bigsearch" id="bigform" autocomplete="off">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <label for="q" hidden>셀럽 이름</label>
-        <input id="q" type="search" placeholder="셀럽 이름을 입력하세요" maxlength="60" autofocus>
-        <button class="btn" id="go" type="submit">분석하기</button>
-      </form>
-      <div class="tryrow">
-        <span>예시 리포트</span>
-        <button class="pillbtn" type="button" id="example">Rihanna × Fenty Beauty</button>
-        <span id="recent"></span>
+    <div class="hero2">
+      <div class="hero-copy">
+        <p class="kicker">Celebrity Brand &amp; Product Strategy</p>
+        <h1>From Celebrity Influence to Product Opportunity.</h1>
+        <p class="sub">Discover what they can credibly sell, and why consumers will buy.</p>
+        <form class="bigsearch" id="bigform" autocomplete="off">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <label for="q" hidden>셀럽 이름</label>
+          <input id="q" type="search" placeholder="셀럽 이름을 입력하세요" maxlength="60">
+          <button class="btn" id="go" type="submit">분석하기</button>
+        </form>
+        <div class="tryrow">
+          <span>예시 리포트</span>
+          <button class="pillbtn" type="button" id="example">Rihanna × Fenty Beauty</button>
+          <span id="recent"></span>
+        </div>
       </div>
     </div>
 
-    <div class="steps">
-      <div><div class="n">STEP 1</div><b>Select Celebrity</b><p>이름을 입력하면 활동 영역, 핵심 시장, 공개 SNS 지표를 정리합니다.</p></div>
-      <div><div class="n">STEP 2</div><b>Analyze Product Fit</b><p>5개 기준으로 평가해 제품 카테고리 TOP 3를 우선순위로 제안합니다.</p></div>
-      <div><div class="n">STEP 3</div><b>View Strategic Report</b><p>제품 제안, 타깃, USP, 연결 논리, 경쟁, 리스크, 근거를 한 화면에 보여줍니다.</p></div>
-    </div>
+    <section class="block" id="cases">
+      <p class="eyebrow">Case Studies</p>
+      <h2 class="big">정체성이 제품이 된 순간.</h2>
+      <p class="secnote">카드를 누르면 같은 방식으로 분석해 볼 수 있어요.</p>
+      <div class="cases" id="caseGrid"></div>
+    </section>
 
-    <div class="method">
-      <div>
-        <p class="eyebrow">Scoring Method</p>
-        <h2>인기가 아니라<br>신뢰를 평가합니다.</h2>
-        <p>팔로워 수가 많다고 점수가 높아지지 않습니다. 소비자가 이 셀럽에게 이 제품의 전문성과 진정성을 부여할 이유가 있는지를 봅니다. 점수는 구매 확률이 아닌 근거 기반의 전략적 적합도입니다.</p>
-      </div>
-      <div class="weights" id="weights"></div>
-    </div>
+    <footer class="foot2">
+      <div class="logo static">CELEB<i>×</i>PRODUCT FIT</div>
+      <p>AI 지식 기반의 전략 가설을 제공합니다. 실시간 검색 결과가 아니며, 계약·투자 판단 전에는 반드시 최신 데이터로 검증하세요.</p>
+    </footer>
   </section>
 
   <!-- ANALYSIS + STRATEGY -->
@@ -300,7 +379,10 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
           { platform: "Instagram", metric: "1억 명 이상", note: "정확한 수치는 최신 확인 필요" },
           { platform: "X (Twitter)", metric: "1억 명 안팎", note: "정확한 수치는 최신 확인 필요" },
         ],
-        existing_beauty: "Fenty Beauty(2017), Fenty Skin(2020) 운영. 이 예시는 실제 성공 사례를 리포트 형식으로 재구성한 것입니다."
+        existing_beauty: "Fenty Beauty(2017), Fenty Skin(2020) 운영. 이 예시는 실제 성공 사례를 리포트 형식으로 재구성한 것입니다.",
+        partnership: { verdict: "조건부 적합", verdict_reason: "2016년 시점 기준. 지금은 자체 브랜드를 운영 중이라 신규 뷰티 협업 제안은 어렵습니다.",
+          conflicts: "2013년 MAC과 협업 컬렉션(RiRi Hearts MAC)을 낸 이력이 있음. 당시 독점 계약 여부는 확인 필요", conflicts_basis: "사실",
+          image_risk: "대담하고 직설적인 이미지가 브랜드 톤의 일부가 되므로, 제품 메시지도 같은 결이어야 함", approach: "'협찬 모델'이 아니라 셀럽 자신의 문제의식(셰이드 부족)을 해결하는 공동 창업 파트너로 제안" }
       },
       top3: [
         { rank: 1, category: "메이크업 · 베이스", product_concept: "40가지 이상의 피부 톤을 고려한 인클루시브 파운데이션",
@@ -337,6 +419,24 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
             market: { score: 75, evidence: "중", reason: "선케어 시장 성장세" },
             differentiation: { score: 80, evidence: "중", reason: "투명 제형은 기술적 차별점이 됨" } } },
       ]
+    },
+    proposals: {
+      1: {
+        title: "Rihanna × 40+ 셰이드 인클루시브 베이스 브랜드 공동 개발 제안",
+        pitch: "누구도 빠지지 않는 셰이드를 첫 제품으로, 리한나의 이름과 철학을 담은 뷰티 브랜드를 함께 만들자는 제안입니다. {제안사}는 제형 개발과 생산을, 리한나는 브랜드의 방향과 최종 승인을 맡습니다.",
+        why_you: [ "리한나 자신이 딥 톤 피부의 당사자라서, '모든 피부톤' 메시지가 광고가 아닌 본인의 이야기가 됩니다.", "글로벌 스타일 아이콘으로서 트렌드를 만드는 위치에 있어, 업계 기준을 바꾸는 제품과 잘 맞습니다.", "음악을 넘어 사업가로 정체성을 넓히는 시점이라, 일회성 협찬보다 브랜드 소유가 더 큰 의미를 가집니다." ],
+        concept: { name: "Shade 40+ 파운데이션 라인", summary: "라이트부터 딥까지 40개 이상 셰이드, 특히 딥 톤 구간을 촘촘하게 나눈 소프트 매트 파운데이션으로 시작합니다.", points: ["40개 이상 셰이드", "딥 톤 세분화", "습한 기후에서도 오래가는 매트"] },
+        why_now: "주요 프레스티지 브랜드의 셰이드가 라이트·미디엄에 치우쳐 딥 톤 소비자의 불만이 쌓여 있습니다. 이 공백을 먼저 채우는 브랜드가 카테고리의 기준이 될 수 있습니다.",
+        celeb_role: [ { level: "핵심 참여", item: "브랜드 철학과 이름, 비주얼 방향 결정" }, { level: "핵심 참여", item: "셰이드 레인지와 제형 최종 테스트·승인" }, { level: "핵심 참여", item: "런칭 캠페인 출연과 공식 발표" }, { level: "선택 참여", item: "SNS 메이크업 튜토리얼 콘텐츠" }, { level: "선택 참여", item: "주요 매장 런칭 이벤트 참석" } ],
+        structures: [
+          { name: "라이선스·로열티형", how: "셀럽 이름과 이미지 사용권을 받고 판매에 따라 로열티를 지급", fit: "참여 부담은 작지만, 브랜드 소유감이 약해 진정성 메시지와 거리가 생길 수 있음", recommended: false },
+          { name: "공동 브랜드(합작)형", how: "셀럽과 제조·운영 파트너가 함께 브랜드를 소유하고 역할을 나눠 운영", fit: "'내가 만든 브랜드'라는 서사가 가능해 이 셀럽의 사업가 정체성과 가장 잘 맞음", recommended: true },
+          { name: "캡슐 컬렉션(한정판)형", how: "기존 브랜드 안에서 기간 한정 라인을 출시", fit: "빠르게 시작할 수 있지만 40+ 셰이드 같은 상시 레인지에는 맞지 않음", recommended: false } ],
+        roadmap: [ { phase: "콘셉트 확정", what: "브랜드 방향, 셰이드 전략, 첫 라인업 합의", duration: "약 1~2개월 (가정)" }, { phase: "제형·셰이드 개발", what: "딥 톤 중심 셰이드 매칭과 셀럽 테스트 반복", duration: "약 6~9개월 (가정)" }, { phase: "인증·생산 준비", what: "출시 국가별 규제 확인, 패키지 확정, 초도 생산", duration: "약 3~4개월 (가정)" }, { phase: "런칭", what: "다국가 동시 출시와 런칭 캠페인", duration: "약 1개월 (가정)" } ],
+        value_for_celeb: [ "일회성 모델료가 아닌, 본인 이름의 브랜드 자산", "음악을 넘어 사업가로서의 커리어 확장", "업계 기준을 바꾼 브랜드라는 문화적 영향력" ],
+        safeguards: [ "모든 제품·광고는 셀럽 측 최종 승인 후 출시", "성분·동물실험 등 윤리 기준을 계약서에 명시", "품질 이슈나 논란 발생 시 공동 대응 절차를 사전에 합의" ],
+        next_steps: [ "소속사와 첫 미팅에서 브랜드 방향 공유", "비밀유지계약(NDA) 체결", "딥 톤 셰이드 샘플 시연" ]
+      }
     },
     strategies: {
       1: {
@@ -468,7 +568,7 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
     const sec1 = h("section");
     sec1.append(h("p", "eyebrow", "Step 1 · Celebrity Profile"));
     const prof = h("div", "profile");
-    prof.append(h("div", "mono", initials(c.name_en, c.name)));
+    prof.append(portrait(c));
     const pr = h("div");
     pr.append(h("h1", null, c.name), h("div", "en", c.name_en && c.name_en !== c.name ? c.name_en : ""), h("p", "field", c.profile));
     const facts = h("div", "facts");
@@ -481,6 +581,19 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
       const ul = h("ul", "insights");
       arr(c.insights).forEach(i => { const li = h("li"); li.append(basisTag(i.basis), h("span", null, i.text)); ul.append(li); });
       pr.append(ul);
+    }
+    const PT = c.partnership;
+    if (PT && PT.verdict) {
+      const box = h("div", "ready");
+      const top = h("div", "ready-top");
+      const vcls = /어려움/.test(PT.verdict) ? "check" : /조건부/.test(PT.verdict) ? "neutral" : "fact";
+      top.append(h("span", "ready-k", "협업 가능성"), h("span", "tag " + vcls, PT.verdict), h("span", "ready-r", PT.verdict_reason));
+      box.append(top);
+      const kv = h("div", "kv");
+      if (PT.conflicts) { const v = h("div"); v.append(basisTag(PT.conflicts_basis), document.createTextNode("  " + PT.conflicts)); kv.append(h("div", "k", "기존 계약·충돌"), v); }
+      if (PT.image_risk) kv.append(h("div", "k", "이미지 리스크"), h("div", null, PT.image_risk));
+      if (PT.approach) kv.append(h("div", "k", "접근 각도"), h("div", null, PT.approach));
+      box.append(kv); pr.append(box);
     }
     prof.append(pr); sec1.append(prof); view.append(sec1);
 
@@ -529,9 +642,10 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
 
     // STEP 3 report slot
     const sec3 = h("section"); sec3.id = "reportSlot"; view.append(sec3);
+    const sec4 = h("section"); sec4.id = "proposalSlot"; view.append(sec4);
     view.append(h("p", "foot", "점수는 객관적으로 검증된 구매 확률이 아니라, 다섯 가지 기준에 대한 근거 기반의 전략적 적합도 평가입니다. 팬덤 규모는 실제 구매 가능성과 구분해 평가했습니다. 근거가 약한 기준이 두 개 이상이면 잠정 점수로, 자료가 부족하면 점수를 확정하지 않습니다."));
     root.append(view);
-    renderReport();
+    renderReport(); renderProposal();
   }
 
   /* ---------- Hero product mockup (SVG drawn from the design spec) ---------- */
@@ -541,11 +655,27 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
   function lum(hex) { const n = parseInt(hex.slice(1), 16); const c = [n >> 16, (n >> 8) & 255, n & 255].map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
   function heroSVG(D) {
     const cols = arr(D.colors).map(c => hexOk(c && c.hex)).filter(Boolean);
-    const main = cols[0] || "#E8E2DA", cap = cols[1] || "#1D1D1F";
-    const finish = String(D.finish || "matte");
-    const label = String(D.product_name || "").split(/\s+/).slice(0, 2).join(" ").slice(0, 14).toUpperCase();
+    return productSVG({ container: D.container, main: cols[0], cap: cols[1], finish: D.finish, label: String(D.product_name || "").split(/\s+/).slice(0, 2).join(" ").slice(0, 14).toUpperCase(), aria: "히어로 제품 용기 목업" });
+  }
+  // Pick a container shape from a category / product description.
+  function containerFor(text) {
+    const s = String(text || "");
+    if (/향수|퍼퓸|프래그런스|향\b|오 드/i.test(s)) return "perfume";
+    if (/립|lip|글로스|틴트|루미나이저/i.test(s)) return "wand";
+    if (/쿠션|파우더|블러셔|하이라이터|팩트|섀도|컨투어/.test(s)) return "compact";
+    if (/세럼|앰플|오일|에센스|드롭/.test(s)) return "dropper";
+    if (/크림|마스크|버터|젤리/.test(s)) return "jar";
+    if (/선|SPF|자외선|클렌|폼|핸드|튜브/i.test(s)) return "tube";
+    if (/스틱|데오/.test(s)) return "stick";
+    return "pump_bottle";
+  }
+  function productSVG(o) {
+    const D = { container: o.container || "pump_bottle" };
+    const main = hexOk(o.main) || "#E8E2DA", cap = hexOk(o.cap) || "#1D1D1F";
+    const finish = String(o.finish || "matte");
+    const label = String(o.label || "");
     const ink = lum(main) > 0.35 ? "#1d1d1f" : "#ffffff";
-    const svg = sv("svg", { viewBox: "0 0 240 320", role: "img", "aria-label": "히어로 제품 용기 목업" });
+    const svg = sv("svg", { viewBox: "0 0 240 320", role: "img", "aria-label": o.aria || "제품 일러스트" });
     svg.append(sv("ellipse", { cx: 120, cy: 296, rx: 78, ry: 7, fill: "#000", "fill-opacity": "0.10" }));
     const body = (el) => { el.setAttribute("fill", main); if (finish === "frosted") el.setAttribute("fill-opacity", "0.88"); svg.append(el); return el; };
     const capEl = (el) => { el.setAttribute("fill", cap); svg.append(el); return el; };
@@ -577,6 +707,11 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
         capEl(sv("rect", { x: 100, y: 44, width: 40, height: 116, rx: 8 }));
         body(sv("rect", { x: 96, y: 158, width: 48, height: 134, rx: 10 }));
         box = { x: 120, y: 228, w: 44 }; break;
+      case "perfume":
+        body(sv("rect", { x: 56, y: 150, width: 128, height: 142, rx: 20 }));
+        capEl(sv("rect", { x: 106, y: 126, width: 28, height: 26, rx: 2 }));
+        capEl(sv("rect", { x: 90, y: 80, width: 60, height: 48, rx: 8 }));
+        box = { x: 120, y: 226, w: 110 }; break;
       default: // pump_bottle
         body(sv("rect", { x: 66, y: 122, width: 108, height: 170, rx: 16 }));
         capEl(sv("rect", { x: 104, y: 96, width: 32, height: 28, rx: 3 }));
@@ -585,7 +720,7 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
         box = { x: 120, y: 212, w: 96 };
     }
     if (finish === "gloss" || finish === "frosted") {
-      const hl = { pump_bottle: [76, 132, 10, 150], dropper: [80, 162, 10, 118], tube: [78, 70, 9, 160], jar: [62, 214, 10, 70], compact: [70, 120, 10, 100], stick: [98, 176, 7, 106], wand: [102, 168, 6, 114] }[String(D.container)] || [76, 132, 10, 150];
+      const hl = { pump_bottle: [76, 132, 10, 150], dropper: [80, 162, 10, 118], tube: [78, 70, 9, 160], jar: [62, 214, 10, 70], compact: [70, 120, 10, 100], stick: [98, 176, 7, 106], wand: [102, 168, 6, 114], perfume: [68, 162, 10, 116] }[String(D.container)] || [76, 132, 10, 150];
       svg.append(sv("rect", { x: hl[0], y: hl[1], width: hl[2], height: hl[3], rx: hl[2] / 2, fill: "#fff", "fill-opacity": finish === "gloss" ? "0.45" : "0.22" }));
     }
     if (label) {
@@ -674,7 +809,7 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
     // 4. Hero product design
     [b, body] = blk("Hero Product", "히어로 제품 디자인");
     const hd = h("div", "hero-d");
-    const mock = h("div", "mock"); mock.append(heroSVG(D), h("span", "cap", "디자인 방향 목업 · 실제 패키지 아님")); hd.append(mock);
+    
     const info = h("div");
     info.append(h("div", "name", D.product_name || P.name), h("p", "concept", D.design_concept || P.description));
     const dkv = h("div", "kv");
@@ -716,14 +851,190 @@ table.cmp { border-collapse: collapse; width: 100%; min-width: 680px; font-size:
     const fn = h("p", "foot", state.example ? "예시 리포트의 사실 항목은 공개 보도 기준이며, 링크는 해당 내용을 찾아볼 수 있는 검색 결과로 연결됩니다. 히어로 제품 디자인은 실제 패키지가 아닌 디자인 방향 제안입니다." : "AI는 실시간으로 웹을 검색하지 않습니다. 출처는 AI가 알고 있는 공개 자료의 이름과 시점이며, 링크는 직접 확인할 수 있도록 검색 결과로 연결됩니다. 확인 전에는 사업 판단의 확정 근거로 쓰지 마세요.");
     fn.style.marginTop = "14px"; body.append(fn);
     rep.append(b);
+    const cta = h("div", "nextstep");
+    const ct = h("div"); ct.append(h("p", "eyebrow", "Step 4 · Partnership Proposal"), h("b", null, "이 전략으로 셀럽·소속사에 보낼 협업 제안서를 만듭니다."), h("p", null, "협업 구조, 셀럽의 역할, 일정, 이미지 보호 장치, 다음 단계까지 한 장으로 정리해요."));
+    const cb = h("button", "btn", (state.proposals || {})[state.selected] ? "제안서 보기" : "제안서 만들기"); cb.type = "button";
+    cb.onclick = () => openProposal(state.selected);
+    cta.append(ct, cb); rep.append(cta);
     slot.append(rep);
   }
 
   function selectRank(rank, scroll) {
-    state.selected = rank; state.reportError = "";
+    state.selected = rank; state.reportError = ""; state.proposalOpen = false;
     renderAnalysis();
     if (!state.strategies[rank] && !state.example) loadStrategy(rank);
     if (scroll) $("reportSlot")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  /* ---------- Step 4: Partnership proposal ---------- */
+  const CO_KEY = "celebfit.company";
+  const getCompany = () => { try { return localStorage.getItem(CO_KEY) || "CTK"; } catch { return "CTK"; } };
+  const setCompany = (v) => { try { localStorage.setItem(CO_KEY, v); } catch {} };
+  const fillCo = (t) => String(t ?? "").replace(/\{제안사\}/g, getCompany());
+
+  function proposalPrompt(A, it, S) {
+    const c = A.celebrity || {}, G = S.go_to_market || {}, T = S.target || {}, D = S.hero_design || {};
+    return `당신은 뷰티 제조사의 셀러브리티 파트너십 담당자입니다. 아래 분석을 바탕으로, 셀럽 본인과 소속사(매니지먼트)에 보낼 협업 제안서를 작성하세요.
+제안하는 회사는 "{제안사}"로 표기하세요 (페이지가 실제 회사명으로 바꿉니다). 제안사의 규모·실적·기술력 같은 주장은 절대 지어내지 마세요.
+
+셀럽: ${c.name || ""} (${c.name_en || ""}) — ${c.field || ""}
+셀럽 요약: ${c.profile || ""}
+기존 뷰티 이력·계약: ${c.existing_beauty || ""} / ${(c.partnership && c.partnership.conflicts) || ""}
+제품 기회 (${it.rank}순위): ${it.category} — ${it.product_concept}
+왜 이 셀럽: ${it.why_celebrity}
+왜 소비자: ${it.why_consumer}
+왜 사업: ${it.why_business}
+판매 중심 지역: ${G.lead_region || ""} (${G.lead_reason || ""}), 채널: ${arr(G.channels).join(", ")}
+타깃: ${T.persona || T.primary || ""} / 구매 이유: ${T.why_buy || ""}
+USP: ${arr(S.core_usp).map(u => u.title + " - " + u.detail).join(" / ")}
+히어로 제품: ${D.product_name || ""} — ${D.design_concept || ""}
+리스크: ${arr(S.risks).map(r => r.risk).join(" / ")}
+
+작성 원칙:
+- 독자는 셀럽과 소속사입니다. 제조사 이익이 아니라 "셀럽에게 왜 좋은가", "셀럽의 정체성과 왜 진짜로 맞는가"를 중심으로 쓰세요.
+- 과장·아첨 없이, 간결한 전략 문장으로. 모든 값은 한국어.
+- 금액, 로열티 비율, 매출 전망, 판매량 같은 숫자는 쓰지 마세요. 조건은 "협의"로 남기세요.
+- 일정은 일반적인 개발 단계 기준의 '가정'으로만 쓰고, 기간 표현 앞에 "약"을 붙이세요.
+- 셀럽 이미지 보호 장치(제품 승인권, 성분·윤리 기준, 이슈 발생 시 대응)를 반드시 포함하세요.
+
+다음 JSON 하나만 답하세요:
+{"title": "제안 제목 한 줄 (예: OOO × 인클루시브 베이스 브랜드 공동 개발 제안)",
+ "pitch": "핵심 제안 2문장",
+ "why_you": ["왜 이 셀럽이어야 하는가 3개 (셀럽의 정체성·이야기와 제품의 연결)"],
+ "concept": {"name": "제품·라인 가칭", "summary": "한두 문장", "points": ["핵심 포인트 3개"]},
+ "why_now": "왜 지금인가 2문장 (시장 공백·트렌드)",
+ "celeb_role": [{"level": "핵심 참여|선택 참여", "item": "셀럽이 맡는 역할 한 줄"}] (4~5개),
+ "structures": [{"name": "협업 구조 이름", "how": "어떻게 운영되는지 한 줄", "fit": "이 셀럽에게 맞는 이유 또는 주의점 한 줄", "recommended": true|false}] (정확히 3개: 라이선스·로열티형, 공동 브랜드(합작)형, 캡슐 컬렉션(한정판)형. 이 중 하나만 recommended true),
+ "roadmap": [{"phase": "단계 이름", "what": "할 일 한 줄", "duration": "약 N개월 (가정)"}] (4~5개),
+ "value_for_celeb": ["셀럽이 얻는 가치 3개 (수익 외 브랜드 자산·커리어 포함)"],
+ "safeguards": ["이미지 보호·리스크 관리 장치 3개"],
+ "next_steps": ["제안 이후 다음 단계 3개 (예: 첫 미팅, NDA, 샘플 시연)"]}`;
+  }
+
+  function openProposal(rank) {
+    state.proposalOpen = true;
+    state.proposals = state.proposals || {};
+    if (!state.proposals[rank] && !state.example && state.pendingProposal !== rank) loadProposal(rank);
+    renderProposal();
+    $("proposalSlot")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function loadProposal(rank, fresh) {
+    const sample = await samplePromise; if (!sample || !state || state.example) return;
+    const items = arr(state.analysis.top3);
+    const it = items.find(x => x.rank === rank) || items[rank - 1];
+    const S = state.strategies[rank]; if (!it || !S) return;
+    ctl?.abort(); ctl = new AbortController();
+    const mine = state; mine.pendingProposal = rank; mine.proposalError = ""; renderProposal();
+    try {
+      const P = await sample.json(proposalPrompt(mine.analysis, { ...it, rank }, S), Object.assign({ modelTier: "complex", signal: ctl.signal }, fresh ? { cache: false } : {}));
+      mine.proposals = mine.proposals || {}; mine.proposals[rank] = P; mine.pendingProposal = null;
+      if (state === mine) { persist(); renderProposal(); renderReport(); }
+    } catch (e) {
+      mine.pendingProposal = null;
+      mine.proposalError = e?.code === "cancelled" ? "제안서 작성을 중지했어요" : (ERR[e?.code] || "제안서를 작성하지 못했어요");
+      if (state === mine) renderProposal();
+    }
+  }
+
+  function proposalText(P, c) {
+    const L = [];
+    const co = getCompany();
+    L.push(fillCo(P.title), `제안: ${co} → ${c.name || ""} 님 및 소속사`, "");
+    L.push(fillCo(P.pitch), "");
+    const sec = (t, lines) => { if (!lines.length) return; L.push(`■ ${t}`); lines.forEach(x => L.push("- " + fillCo(x))); L.push(""); };
+    sec(`왜 ${c.name || "당신"}인가`, arr(P.why_you));
+    if (P.concept) { L.push("■ 제품 콘셉트", `${fillCo(P.concept.name)} — ${fillCo(P.concept.summary)}`); arr(P.concept.points).forEach(x => L.push("- " + fillCo(x))); L.push(""); }
+    if (P.why_now) { L.push("■ 왜 지금인가", fillCo(P.why_now), ""); }
+    sec("셀럽의 역할", arr(P.celeb_role).map(r => `[${r.level}] ${r.item}`));
+    sec("협업 구조 제안 (조건은 협의)", arr(P.structures).map(x => `${x.recommended ? "(추천) " : ""}${x.name}: ${x.how} — ${x.fit}`));
+    sec("진행 일정 (가정)", arr(P.roadmap).map(r => `${r.phase} · ${r.duration}: ${r.what}`));
+    sec("셀럽이 얻는 가치", arr(P.value_for_celeb));
+    sec("이미지 보호 장치", arr(P.safeguards));
+    sec("다음 단계", arr(P.next_steps));
+    L.push("※ 본 제안서는 공개 정보 기반의 초안이며, 세부 조건은 협의를 통해 확정합니다.");
+    return L.join("\n");
+  }
+
+  function renderProposal() {
+    const slot = $("proposalSlot"); if (!slot || !state) return;
+    slot.replaceChildren();
+    if (!state.proposalOpen) return;
+    const rank = state.selected, c = state.analysis.celebrity || {};
+    const P = (state.proposals || {})[rank];
+    const wrap = h("div", "report proposal");
+
+    const head = h("div", "rhead");
+    const hl = h("div"); hl.append(h("p", "eyebrow", `Step 4 · Partnership Proposal · ${rank}순위 제품`));
+    if (P) { hl.append(h("h2", null, fillCo(P.title)), h("p", null, fillCo(P.pitch))); }
+    else hl.append(h("h2", null, "협업 제안서"));
+    const ctrl = h("div", "pctrl");
+    const lab = h("label", "colabel", "제안사"); lab.setAttribute("for", "coName");
+    const inp = h("input"); inp.id = "coName"; inp.type = "text"; inp.maxLength = 40; inp.value = getCompany();
+    inp.onchange = () => { setCompany(inp.value.trim() || "CTK"); renderProposal(); };
+    ctrl.append(lab, inp);
+    if (P) {
+      const copy = h("button", "btn small", "제안서 복사"); copy.type = "button";
+      copy.onclick = async () => {
+        const text = proposalText(P, c);
+        try { await navigator.clipboard.writeText(text); copy.textContent = "복사됨"; setTimeout(() => copy.textContent = "제안서 복사", 1600); }
+        catch { const ta = h("textarea", "copyfall"); ta.value = text; ta.readOnly = true; slot.querySelector(".copyfall")?.remove(); wrap.append(ta); ta.focus(); ta.select(); copy.textContent = "텍스트를 선택했어요. Cmd+C로 복사하세요"; }
+      };
+      ctrl.append(copy);
+      if (!state.example) { const re = h("button", "ghost", "다시 작성"); re.type = "button"; re.onclick = () => loadProposal(rank, true); ctrl.append(re); }
+    }
+    head.append(hl, ctrl); wrap.append(head);
+    if (P && state.example) wrap.append(h("p", "foot", "예시: Fenty Beauty 출시 전인 2016년 시점에 리한나 측에 보낸다고 가정하고 재구성한 제안서입니다."));
+
+    if (!P) {
+      const box = h("div", "loading"); box.style.marginTop = "28px";
+      if (state.pendingProposal === rank) {
+        box.append(h("div", "spinner"));
+        const m = h("div", "msg"); m.append(h("strong", null, "제안서 작성 중"), h("small", null, "협업 구조, 셀럽의 역할, 일정, 보호 장치를 정리하고 있어요. 보통 30초~1분 걸려요.")); box.append(m);
+        const stop = h("button", "ghost", "중지"); stop.type = "button"; stop.onclick = () => ctl?.abort(); box.append(stop);
+      } else if (state.example) {
+        const m = h("div", "msg"); m.append(h("strong", null, "예시는 1순위 제품의 제안서만 준비돼 있어요"), h("small", null, "직접 셀럽을 검색하면 모든 순위의 제안서를 만들 수 있어요.")); box.append(m);
+      } else {
+        const m = h("div", "msg"); m.append(h("strong", null, state.proposalError || "제안서가 아직 없어요"), h("small", null, "버튼을 누르면 이 제품 전략으로 제안서를 작성합니다.")); box.append(m);
+        const go = h("button", "btn small", "제안서 만들기"); go.type = "button"; go.onclick = () => loadProposal(rank); box.append(go);
+      }
+      wrap.append(box); slot.append(wrap); return;
+    }
+
+    let b, body;
+    [b, body] = blk("Why You", `왜 ${c.name || "이 셀럽"}인가`);
+    const ul = h("ul", "lines"); arr(P.why_you).forEach(x => { const li = h("li"); li.append(h("span", "tag neutral", "Fit"), h("span", "txt", fillCo(x))); ul.append(li); }); body.append(ul); wrap.append(b);
+
+    if (P.concept) {
+      [b, body] = blk("Concept", "제품 콘셉트");
+      body.append(h("div", "pname", fillCo(P.concept.name)), h("p", "pdesc", fillCo(P.concept.summary)));
+      const cl = h("div", "chipline"); arr(P.concept.points).forEach(x => cl.append(h("span", null, fillCo(x)))); body.append(cl); wrap.append(b);
+    }
+    if (P.why_now) { [b, body] = blk("Why Now", "왜 지금인가"); body.append(h("p", "pdesc", fillCo(P.why_now))); wrap.append(b); }
+
+    [b, body] = blk("Celebrity Role", "셀럽의 역할");
+    const rl = h("ul", "lines"); arr(P.celeb_role).forEach(r => { const li = h("li"); li.append(h("span", "tag " + (/핵심/.test(r.level) ? "fact" : "neutral"), r.level || "참여"), h("span", "txt", fillCo(r.item))); rl.append(li); }); body.append(rl); wrap.append(b);
+
+    [b, body] = blk("Structure", "협업 구조 제안");
+    const sg = h("div", "structs");
+    arr(P.structures).forEach(x => { const d = h("div", "struct" + (x.recommended ? " rec" : "")); if (x.recommended) d.append(h("span", "tag fact", "추천")); d.append(h("b", null, x.name), h("p", null, fillCo(x.how)), h("p", "fit", fillCo(x.fit))); sg.append(d); });
+    body.append(sg, h("p", "foot", "금액·지분·로열티 등 조건은 이 제안서에 넣지 않았습니다. 첫 미팅 이후 협의로 정하세요.")); body.lastChild.style.marginTop = "12px"; wrap.append(b);
+
+    [b, body] = blk("Roadmap", "진행 일정 (가정)");
+    const ch = h("ol", "chain"); arr(P.roadmap).forEach(r => { const li = h("li"); li.append(h("b", null, r.phase + "  "), h("span", "dur", r.duration || ""), h("div", "rd", fillCo(r.what))); ch.append(li); }); body.append(ch); wrap.append(b);
+
+    [b, body] = blk("Value for You", "셀럽이 얻는 가치");
+    const us = h("div", "usps"); arr(P.value_for_celeb).forEach(v => { const d = h("div"); d.append(h("p", null, fillCo(v))); us.append(d); }); body.append(us); wrap.append(b);
+
+    [b, body] = blk("Safeguards", "이미지 보호 장치");
+    const sl = h("ul", "lines"); arr(P.safeguards).forEach(x => { const li = h("li"); li.append(h("span", "tag interp", "보호"), h("span", "txt", fillCo(x))); sl.append(li); }); body.append(sl); wrap.append(b);
+
+    [b, body] = blk("Next Steps", "다음 단계");
+    const nl = h("ol", "chain"); arr(P.next_steps).forEach(x => nl.append(h("li", null, fillCo(x)))); body.append(nl); wrap.append(b);
+
+    wrap.append(h("p", "foot", "AI가 공개 정보와 위 분석을 바탕으로 쓴 초안입니다. 보내기 전에 사실 관계와 표현을 검토하고, 제안사 소개는 직접 덧붙이세요."));
+    wrap.lastChild.style.marginTop = "18px";
+    slot.append(wrap);
   }
 
   /* ---------- AI ---------- */
@@ -762,7 +1073,7 @@ ${RULES}
 
 다음 JSON 하나만 답하세요:
 {"known": true, "data_sufficiency": "충분|부분|부족",
- "celebrity": {"name": "한글 이름", "name_en": "영문 이름", "field": "활동 영역 한 줄", "nationality": "", "primary_markets": ["2~4개"], "profile": "이미지와 정체성 1~2문장", "insights": [{"text": "핵심 인사이트 한 문장", "basis": "사실|해석|검증 필요"}] (3개), "sns": [{"platform": "", "metric": "공개된 대략 팔로워 수 또는 '확인 필요'", "note": "최신 확인 필요 등"}] (주요 1~3개), "existing_beauty": "기존 뷰티 사업·모델 이력 또는 '알려진 이력 없음'"},
+ "celebrity": {"name": "한글 이름", "name_en": "영문 이름", "field": "활동 영역 한 줄", "nationality": "", "primary_markets": ["2~4개"], "profile": "이미지와 정체성 1~2문장", "insights": [{"text": "핵심 인사이트 한 문장", "basis": "사실|해석|검증 필요"}] (3개), "sns": [{"platform": "", "metric": "공개된 대략 팔로워 수 또는 '확인 필요'", "note": "최신 확인 필요 등"}] (주요 1~3개), "existing_beauty": "기존 뷰티 사업·모델 이력 또는 '알려진 이력 없음'", "partnership": {"verdict": "제안 적합|조건부 적합|제안 어려움", "verdict_reason": "한 문장", "conflicts": "현재 알려진 뷰티 브랜드 운영·광고 모델·독점 계약. 모르면 '알려진 충돌 없음, 계약 현황 확인 필요'", "conflicts_basis": "사실|해석|검증 필요", "image_risk": "공개적으로 알려진 이미지 리스크 또는 '알려진 이슈 없음'", "approach": "소속사·매니지먼트에 처음 다가갈 때의 각도 한 문장"}},
  "top3": [{"rank": 1, "category": "대분류 · 소분류", "product_concept": "구체적 제품 제안 (예: 파운데이션이 아닌 '40가지 이상의 피부 톤을 고려한 인클루시브 파운데이션')", "one_liner": "한 문장", "why_celebrity": "한 문장", "why_consumer": "한 문장", "why_business": "한 문장", "scores": {"credibility": {"score": 0, "evidence": "강|중|약", "reason": "짧은 이유"}, "fandom": {...}, "need": {...}, "market": {...}, "differentiation": {...}}}] (정확히 3개)}`;
   }
 
@@ -872,7 +1183,7 @@ ${RULES}
   function persist() {
     if (!state || state.example) return;
     const list = loadRecent().filter(x => x.name !== state.name);
-    list.unshift({ name: state.name, label: state.analysis.celebrity?.name || state.name, state: { name: state.name, analysis: state.analysis, strategies: state.strategies } });
+    list.unshift({ name: state.name, label: state.analysis.celebrity?.name || state.name, state: { name: state.name, analysis: state.analysis, strategies: state.strategies, proposals: state.proposals || {} } });
     try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, 6))); } catch {}
     drawRecent();
   }
@@ -882,13 +1193,85 @@ ${RULES}
   }
 
   /* ---------- Wiring ---------- */
-  const w = $("weights");
+  const w = $("weights") || document.createElement("div");
   CRITERIA.forEach(c => { const r = h("div", "wrow"); r.append(h("span", null, c.label), h("span", "pct", c.w + "%"), bar(c.w / 30 * 100)); w.append(r); });
 
   $("bigform").addEventListener("submit", (e) => { e.preventDefault(); analyze($("q").value); });
   $("navform").addEventListener("submit", (e) => { e.preventDefault(); analyze($("navq").value); });
   $("home").onclick = () => { ctl?.abort(); show("home"); };
-  $("example").onclick = () => { ctl?.abort(); state = { name: "Rihanna", analysis: EXAMPLE.analysis, strategies: EXAMPLE.strategies, selected: 1, example: true }; show("analysis"); renderAnalysis(); };
+  /* ---------- Landing imagery ---------- */
+  const TONES = [["#E7DDD3", "#1D1D1F", "frosted"], ["#D3A99A", "#C9CCD0", "gloss"], ["#EEEBE7", "#8C6A55", "matte"]];
+  function place(root, o, cx, top, hgt) {
+    const w = hgt * 0.75, el = productSVG(o);
+    el.setAttribute("x", cx - w / 2); el.setAttribute("y", top - hgt * (292 / 320)); el.setAttribute("width", w); el.setAttribute("height", hgt);
+    root.append(el);
+  }
+  function plinth(root, x, y, w, hgt) {
+    root.append(sv("rect", { x, y, width: w, height: hgt, rx: 10, style: "fill: var(--plinth)" }));
+    root.append(sv("rect", { x, y, width: w, height: 8, rx: 4, style: "fill: var(--plinth-top)" }));
+  }
+  function renderHeroStage() {
+    const s = sv("svg", { viewBox: "0 0 560 448", role: "img", "aria-label": "뷰티 제품 일러스트" });
+    plinth(s, 28, 340, 214, 120); plinth(s, 252, 296, 160, 170); plinth(s, 422, 366, 116, 100);
+    place(s, { container: "pump_bottle", main: "#E6DCD1", cap: "#1D1D1F", finish: "frosted", label: "CELEB" }, 135, 340, 300);
+    place(s, { container: "dropper", main: "#C9A27E", cap: "#2A2523", finish: "gloss" }, 332, 296, 262);
+    place(s, { container: "wand", main: "#C98B84", cap: "#D9D4CF", finish: "gloss" }, 480, 366, 230);
+    $("heroStage").append(s);
+  }
+  const CASES = [
+    { name: "Rihanna", ko: "리한나", brand: "Fenty Beauty", year: "2017", product: "인클루시브 파운데이션", note: "40개 셰이드로 출시해 업계의 셰이드 기준을 바꿨다는 평가.", look: { container: "pump_bottle", main: "#7B4B2E", cap: "#1C1C1C", finish: "frosted" }, example: true },
+    { name: "Selena Gomez", ko: "셀레나 고메즈", brand: "Rare Beauty", year: "2020", product: "리퀴드 블러시", note: "있는 그대로의 나, 정신 건강 메시지를 브랜드 가치로 연결.", look: { container: "wand", main: "#E2A79A", cap: "#E9E4DF", finish: "gloss" } },
+    { name: "Hailey Bieber", ko: "헤일리 비버", brand: "Rhode", year: "2022", product: "펩타이드 립 트리트먼트", note: "본인의 '글레이즈드 스킨' 이미지를 제품 언어로 옮김.", look: { container: "tube", main: "#E3CFC2", cap: "#B89A88", finish: "gloss" } },
+    { name: "Kylie Jenner", ko: "카일리 제너", brand: "Kylie Cosmetics", year: "2015", product: "립 키트", note: "화제가 된 입술 이미지가 첫 제품의 직접적인 근거가 됨.", look: { container: "wand", main: "#B5655A", cap: "#1C1C1C", finish: "matte" } },
+  ];
+  function renderCases() {
+    const g = $("caseGrid");
+    CASES.forEach(cs => {
+      const b = h("button", "case"); b.type = "button";
+            const body = h("div", "body");
+      body.append(h("div", "meta", `${cs.year} · ${cs.brand}`), h("div", "who", cs.ko), h("div", "what", cs.product), h("p", null, cs.note), h("span", "go", cs.example ? "예시 리포트 보기 →" : "이 셀럽 분석하기 →"));
+      b.append(body);
+      b.onclick = () => cs.example ? openExample() : analyze(cs.name);
+      g.append(b);
+    });
+  }
+
+  /* ---------- Celebrity photo (viewer-supplied, kept in this browser) ---------- */
+  const photoKey = (c) => "celebfit.photo." + (c.name_en || c.name || "");
+  function portrait(c) {
+    const wrap = h("div", "portrait");
+    let src = null; try { src = localStorage.getItem(photoKey(c)); } catch {}
+    if (src) { const img = h("img"); img.src = src; img.alt = (c.name || "") + " 사진"; wrap.append(img); }
+    else wrap.append(h("div", "mono", initials(c.name_en, c.name)));
+    const input = h("input"); input.type = "file"; input.accept = "image/*"; input.hidden = true; input.id = "photoInput";
+    const btn = h("button", "linkbtn", src ? "사진 변경" : "사진 추가"); btn.type = "button"; btn.title = "사용 권한이 있는 사진만 올려 주세요. 이 브라우저에만 저장돼요.";
+    btn.onclick = () => input.click();
+    input.onchange = () => {
+      const f = input.files && input.files[0]; if (!f) return;
+      const img = new Image(); const url = URL.createObjectURL(f);
+      img.onload = () => {
+        const size = 360, cv = document.createElement("canvas"); cv.width = cv.height = size;
+        const s = Math.max(size / img.width, size / img.height), w = img.width * s, hh = img.height * s;
+        cv.getContext("2d").drawImage(img, (size - w) / 2, (size - hh) / 2, w, hh);
+        const data = cv.toDataURL("image/jpeg", 0.85); URL.revokeObjectURL(url);
+        try { localStorage.setItem(photoKey(c), data); } catch {}
+        const fresh = portrait(c);
+        const mono = fresh.querySelector(".mono");
+        if (mono) { const im = h("img"); im.src = data; im.alt = (c.name || "") + " 사진"; mono.replaceWith(im); }
+        wrap.replaceWith(fresh);
+      };
+      img.src = url;
+    };
+    wrap.append(btn, input);
+    return wrap;
+  }
+
+  function openExample() { ctl?.abort(); state = { name: "Rihanna", analysis: EXAMPLE.analysis, strategies: EXAMPLE.strategies, proposals: EXAMPLE.proposals, selected: 1, example: true }; show("analysis"); renderAnalysis(); }
+  document.querySelectorAll("#navlinks [data-go]").forEach(b => b.onclick = () => { ctl?.abort(); show("home"); document.getElementById(b.dataset.go).scrollIntoView({ behavior: "smooth" }); });
+  if ($("ctaGo")) $("ctaGo").onclick = () => { window.scrollTo({ top: 0, behavior: "smooth" }); setTimeout(() => $("q").focus(), 350); };
+  renderCases();
+
+  $("example").onclick = () => { ctl?.abort(); state = { name: "Rihanna", analysis: EXAMPLE.analysis, strategies: EXAMPLE.strategies, proposals: EXAMPLE.proposals, selected: 1, example: true }; show("analysis"); renderAnalysis(); };
   drawRecent();
 })();
 </script>
